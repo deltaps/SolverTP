@@ -17,8 +17,35 @@ public class DFSPlanner implements Planner{
 
     @Override
     public List<Action> plan() {
-        //TODO implémenté la méthode plan
-        return null;
+        Map<Variable,Object> instanciation = new HashMap<Variable,Object>(this.initialState);
+        LinkedList<Action> plan = new LinkedList<>();
+        Set<Map<Variable,Object>> closed = new HashSet<>();
+        closed.add(this.initialState);
+        return dfsRec(instanciation,plan,closed);
+    }
+    public List<Action> dfsRec(Map<Variable,Object> instanciation, LinkedList<Action> plan, Set<Map<Variable,Object>> closed){
+        if(this.goal.isSatisfiedBy(instanciation)){
+            return plan;
+        }
+        else{
+            for(Action action : this.actions){
+                if(action.isApplicable(instanciation)){
+                    Map<Variable, Object> next = new HashMap<>(action.successor(instanciation));
+                    if(!(closed.contains(next))){
+                        plan.add(action);
+                        closed.add(next);
+                        List<Action> subPlan = dfsRec(next,plan,closed);
+                        if(!(subPlan == null)){
+                            return subPlan;
+                        }
+                        else{
+                            plan.pop();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     @Override
