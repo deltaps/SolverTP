@@ -11,8 +11,8 @@ public class Test {
         ok = ok && BasicGoalTests.testIsSatisfiedBy();
         ok = ok && DFSPlannerTests.testPlan();
         ok = ok && BFSPlannerTests.testPlan();
-        //ok = ok && AStarPlannerTests.testPlan();
         ok = ok && DijkstraPlannerTests.testPlan();
+        ok = ok && AStarPlannerTests.testPlan();
         System.out.println(ok ? "All tests passed" : "At least one test failed");
     }
 }
