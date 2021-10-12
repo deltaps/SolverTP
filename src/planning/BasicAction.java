@@ -42,4 +42,13 @@ public class BasicAction implements Action{
     public int getCost() {
         return this.cout;
     }
+
+    @Override
+    public String toString() {
+        return "BasicAction{" +
+                "precondition=" + precondition +
+                ", effet=" + effet +
+                ", cout=" + cout +
+                '}';
+    }
 }

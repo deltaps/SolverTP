@@ -1,5 +1,6 @@
 package planning;
 
+import representation.Constraint;
 import representation.Variable;
 
 import java.util.*;
@@ -36,8 +37,7 @@ public class DijkstraPlanner implements Planner{
             for(Map<Variable,Object> node : open){
                 if(distance.get(node) < argmin){
                     argmin = distance.get(node);
-                    instantiation.clear();
-                    instantiation.putAll(node);
+                    instantiation = node;
                 }
             }
             open.remove(instantiation);
@@ -74,12 +74,13 @@ public class DijkstraPlanner implements Planner{
         for(Map<Variable,Object> node : goals){
             if(distance.get(node) < argmin){
                 argmin = distance.get(node);
-                goal.clear();
-                goal.putAll(node);
+                goal = node;
             }
         }
-        while(goal != this.getInitialState()){
-            DIJ_plan.add(plan.get(goal));
+        while(goal != null){
+            if(plan.get(goal) != null){
+                DIJ_plan.add(plan.get(goal));
+            }
             goal = father.get(goal);
         }
         Collections.reverse(DIJ_plan);

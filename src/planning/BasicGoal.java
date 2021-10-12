@@ -24,4 +24,11 @@ public class BasicGoal implements Goal{
         }
         return ok;
     }
+
+    @Override
+    public String toString() {
+        return "BasicGoal{" +
+                "instanciation=" + instanciation +
+                '}';
+    }
 }
