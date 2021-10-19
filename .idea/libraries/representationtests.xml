@@ -4,6 +4,7 @@
       <root url="jar://$PROJECT_DIR$/lib/representationtests.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/solvertests.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/planningtests.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/dataminingtests.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
