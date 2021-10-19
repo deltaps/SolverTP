@@ -19,11 +19,11 @@ public class BooleanDatabase {
         this.transaction.add(transaction);
     }
 
-    public List<Set<BooleanVariable>> getTransaction() {
+    public List<Set<BooleanVariable>> getTransactions() {
         return transaction;
     }
 
-    public void setTransaction(List<Set<BooleanVariable>> transaction) {
-        this.transaction = transaction;
+    public Set<BooleanVariable> getItems() {
+        return items;
     }
 }

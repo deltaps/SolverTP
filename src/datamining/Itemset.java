@@ -17,7 +17,7 @@ public class Itemset {
         return items;
     }
 
-    public float getFrequence() {
+    public float getFrequency() {
         return frequence;
     }
 }
