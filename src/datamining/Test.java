@@ -7,7 +7,7 @@ public class Test {
         boolean ok = true;
         ok = ok && AbstractItemsetMinerTests.testFrequency();
         ok = ok && AprioriTests.testFrequentSingletons();
-        //ok = ok && AprioriTests.testCombine();
+        ok = ok && AprioriTests.testCombine();
         //ok = ok && AprioriTests.testAllSubsetsFrequent();
         //ok = ok && AprioriTests.testExtract();
         //ok = ok && AbstractAssociationRuleMinerTests.testFrequency();
