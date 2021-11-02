@@ -8,11 +8,11 @@ public class Test {
         ok = ok && AbstractItemsetMinerTests.testFrequency();
         ok = ok && AprioriTests.testFrequentSingletons();
         ok = ok && AprioriTests.testCombine();
-        //ok = ok && AprioriTests.testAllSubsetsFrequent();
+        ok = ok && AprioriTests.testAllSubsetsFrequent();
         //ok = ok && AprioriTests.testExtract();
-        //ok = ok && AbstractAssociationRuleMinerTests.testFrequency();
-        //ok = ok && AbstractAssociationRuleMinerTests.testConfidence();
-        //ok = ok && BruteForceAssociationRuleMinerTests.testAllCandidatePremises();
+        ok = ok && AbstractAssociationRuleMinerTests.testFrequency();
+        ok = ok && AbstractAssociationRuleMinerTests.testConfidence();
+        ok = ok && BruteForceAssociationRuleMinerTests.testAllCandidatePremises();
         //ok = ok && BruteForceAssociationRuleMinerTests.testExtract();
         //ok = ok && DatabaseTests.testItemTable();
         //ok = ok && DatabaseTests.testPropositionalize();

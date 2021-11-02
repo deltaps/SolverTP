@@ -22,31 +22,15 @@ public class AssociationRule {
         return premise;
     }
 
-    public void setPremise(Set<BooleanVariable> premise) {
-        this.premise = premise;
-    }
-
     public Set<BooleanVariable> getConclusion() {
         return conclusion;
-    }
-
-    public void setConclusion(Set<BooleanVariable> conclusion) {
-        this.conclusion = conclusion;
     }
 
     public float getConfidence() {
         return confidence;
     }
 
-    public void setConfidence(float confidence) {
-        this.confidence = confidence;
-    }
-
     public float getFrequency() {
         return frequency;
-    }
-
-    public void setFrequency(float frequency) {
-        this.frequency = frequency;
     }
 }

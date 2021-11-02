@@ -1,5 +1,6 @@
 package datamining;
 
+import dataminingtests.ItemsetMinerTests;
 import representation.BooleanVariable;
 
 import java.util.*;
@@ -25,7 +26,7 @@ public class Apriori extends AbstractItemsetMiner{
         Iterator<BooleanVariable> it1 = l1.iterator();
         Iterator<BooleanVariable> it2 = l2.iterator();
         SortedSet<BooleanVariable> result = new TreeSet<>(COMPARATOR);
-        int taille = l1.size();
+        int taille = l1.size() -1;
         if(l1.size() == 0 || l2.size() == 0){
             return null;
         }
@@ -54,116 +55,7 @@ public class Apriori extends AbstractItemsetMiner{
         }
         return null;
     }
-    /*
-    public static SortedSet<BooleanVariable> combine(SortedSet<BooleanVariable>l1, SortedSet<BooleanVariable>l2) {
-        SortedSet<BooleanVariable> result = new TreeSet<>(COMPARATOR);
-        if(l1.size() == 0 || l2.size() == 0){
-            return null;
-        }
-        if(l1.size() == l2.size()){
-            int taille = l1.size();
-            if(!(l1.last().equals(l2.last()))){
-                if(taille == 1){
-                    result.add(l1.first());
-                    result.add(l2.first());
-                    return result;
-                }
-                for(int k = 0; k < taille; k++){
-                    if(l1.first().equals(l2.first())){
-                        result.add(l1.first());
-                        result.add(l2.first());
-                        l1.remove(l1.first());
-                        l2.remove(l2.first());
-                    }
-                    else{
-                        return null;
-                    }
-                }
-                result.add(l1.first());
-                result.add(l2.first());
-                return result;
-            }
-            else{
-                System.out.println(3);
-                return null;
-            }
-        }
-        System.out.println(4);
-        return null;
-    }
-    /*
-    public static SortedSet<BooleanVariable> combine(SortedSet<BooleanVariable> items1,SortedSet<BooleanVariable> items2){
-        SortedSet<BooleanVariable> copieItems1 = items1;
-        SortedSet<BooleanVariable> copieItems2 = items2;
-        if(items1.size() == 0 || items2.size() == 0){
-            return null;
-        }
-        if(items1.size() == items2.size()){
-            SortedSet<BooleanVariable> result = new TreeSet<>(COMPARATOR);
-            if(items1.size() == 1){
-                if(items1.first() != items2.first()){
-                    result.add(items1.first());
-                    result.add(items2.first());
-                    return result;
-                }
-            }
-            BooleanVariable item1;
-            BooleanVariable item2;
-            for(int k = 0; k < items1.size(); k++){
-                if(copieItems1.first() != copieItems2.first()){
-                    return null;
-                }
-                item1 = copieItems1.first();
-                item2 = copieItems2.first();
-                result.add(item1);
-                result.add(item2);
-                copieItems1.remove(item1);
-                copieItems2.remove(item2);
-                System.out.println(items1.size());
-            }
-            if(copieItems1.first() != copieItems2.first()){
-                result.add(copieItems1.first());
-                result.add(copieItems2.first());
-                return result;
-            }
-        }
-        return null;
-    }
-    /*
-    public SortedSet<BooleanVariable> combine(SortedSet<BooleanVariable> items1,SortedSet<BooleanVariable> items2){
-        TreeSet<BooleanVariable> resultat = new TreeSet<>(COMPARATOR);
-        if(items1.size() == items2.size()){
-            if(items1.last() == items2.last()){
-                if(items1.subSet(items1.iterator().next(), items1.last()).equals(items2.subSet(items2.iterator().next(), items2.last()))){
-                    resultat.addAll(items1);
-                    resultat.addAll(items2);
-                    return resultat;
-                }
-                else{
-                    return null;
-                }
-            }
-           else{
-               return null;
-            }
-            /*
-            for(int k = 0; k < items1.size(); k++){
-                if(items1.first() == items2.first()){
-                    items1.remove(k);
-                    items2.remove(k);
-                }
-                else{
-                    return null;
-                }
-            }
 
-        }
-        else{
-            return null;
-        }
-    }
-
-     */
     public static boolean allSubsetsFrequent(Set<BooleanVariable> items, Collection<SortedSet<BooleanVariable>> collectionItem){
         Set<BooleanVariable> copieItems = new HashSet<>(items); // Il faut faire une copie sinon on ne peu pas changer dans la boucle la valeur de items
         for(BooleanVariable item : copieItems){
@@ -181,8 +73,34 @@ public class Apriori extends AbstractItemsetMiner{
     }
 
     @Override
-    public Set<Itemset> extract(Float frequence) {
-        return null;
+    public Set<Itemset> extract(float minFrequence) {
+        Set<Itemset> result = new HashSet<>();
+        ArrayList<SortedSet<BooleanVariable>> levelKminus1 = new ArrayList<>();
+        Set<Itemset> singletons = new HashSet<>(this.frequentSingletons(minFrequence));
+        result.addAll(singletons);
+        for(Itemset single : singletons){
+            SortedSet<BooleanVariable> convertir = new TreeSet<>(AbstractItemsetMiner.COMPARATOR);
+            convertir.addAll(single.getItems());
+            levelKminus1.add(convertir);
+            result.add(single);
+        }
+        for(int k = 2; k <= this.base.getItems().size(); k++){ // On part de deux car on à déjà fait les singletons
+            ArrayList<SortedSet<BooleanVariable>> levelK = new ArrayList<>();
+            for(int i = 0; i < levelKminus1.size();i++){
+                for(int j = i+1; j < levelKminus1.size();j++){
+                    SortedSet<BooleanVariable> liste = this.combine(levelKminus1.get(i),levelKminus1.get(j));
+                    if(liste != null && allSubsetsFrequent(liste,levelKminus1)){
+                        float frequence = frequency(liste);
+                        if(frequence >= minFrequence){
+                            result.add(new Itemset(liste,frequence));
+                            levelK.add(liste);
+                        }
+                    }
+                }
+            }
+            levelKminus1 = levelK;
+        }
+        return result;
     }
 
 }
