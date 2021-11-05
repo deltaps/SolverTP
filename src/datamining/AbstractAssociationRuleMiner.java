@@ -5,7 +5,7 @@ import representation.BooleanVariable;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractAssociationRuleMiner {
+public abstract class AbstractAssociationRuleMiner implements AssociationRuleMiner{
 
     protected BooleanDatabase database;
 
