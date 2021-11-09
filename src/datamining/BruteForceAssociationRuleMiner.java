@@ -35,9 +35,25 @@ public class BruteForceAssociationRuleMiner extends AbstractAssociationRuleMiner
         result.remove(items);
         return result;
     }
-
+    //TODO a revoir
     @Override
-    public Set<AssociationRule> extract(float minFrequency, float minConfidence) {
-        return null;
+    public Set<AssociationRule> extract(float minFrequency, float minConfidence){
+        Set<AssociationRule> retourne = new HashSet<>();
+        ItemsetMiner apriori = new Apriori(this.getDatabase());
+        Set<Itemset> list = apriori.extract(minFrequency); // On récupère tout les item avec une fréquence minimal
+        for(Itemset item : list){
+            float itemFrequency = item.getFrequency();
+            Set<Set<BooleanVariable>> premises = BruteForceAssociationRuleMiner.allCandidatePremises(item.getItems()); // On récupère toute les sous listes de la liset d'items
+            for(Set<BooleanVariable> premise : premises){ // On boucle donc sur toutes ces sous liste
+                Set<BooleanVariable> conclusion = new HashSet<>(item.getItems()); // On recrée une liste possédant touts les item de notre liste d'item avec frequence minimal
+                conclusion.removeAll(premise); // On supprime de cette liste l'item que l'on est en train de regarder (pas besoin de le vérifier avec lui même)
+                float itemConfidence = confidence(premise, conclusion, list); // On regarde la confiance de notre item
+                if(itemConfidence >= minConfidence){ // Si la confiance est bonne, on ajoute a notre liste la nouvelle règle d'association correspondante.
+                    AssociationRule rule = new AssociationRule(premise, conclusion, itemFrequency, itemConfidence);
+                    retourne.add(rule);
+                }
+            }
+        }
+        return retourne;
     }
 }

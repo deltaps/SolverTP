@@ -18,7 +18,6 @@ public class BinaryExtensionConstraint implements Constraint{
   public void addTuple(Object o1, Object o2){
     t1.add(new BinaryTuple(o1,o2));
   }
-  //Méthode isSatisfiedBy a faire
   @Override
   public Set<Variable> getScope(){
     Set<Variable> variable = new HashSet();
