@@ -41,6 +41,7 @@ public class HouseRepresentation {
     }
 
     public void makeConstraint(){
+        //Contrainte pour que chaque pièce soit différentes des autre
         for(int i1 = 0; i1 < this.i; i1++){
             for(int j1 = 0; j1 < this.j; j1++){
                 for(int i2 = 0; i2 < this.j; i2++){
@@ -55,6 +56,7 @@ public class HouseRepresentation {
                 }
             }
         }
+        //Contraintes pour que les pièces d'eau soient côte a côte
         for(int i = 0; i < this.i; i++){
             for(int j = 0; j < this.j; j++){
                 int[][] voisins = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
@@ -75,6 +77,25 @@ public class HouseRepresentation {
                 }
             }
         }
+        //Contrainte pour que toute les étape soit faite les une après les autres
+        Constraint contrainte1 = new Implication(this.dalleCoulee,false,this.solHumide,false);
+        this.listeContrainte.add(contrainte1);
+        Constraint contrainte2 = new Implication(this.dalleCoulee,true,this.solHumide,true);
+        this.listeContrainte.add(contrainte2);
+        Constraint contrainte3 = new Implication(this.solHumide,true,this.murElevee,false);
+        this.listeContrainte.add(contrainte3);
+        Constraint contrainte4 = new Implication(this.murElevee,true,this.solHumide,false);
+        this.listeContrainte.add(contrainte4);
+        Constraint contrainte5 = new Implication(this.murElevee,false,this.toitureTermine,false);
+        this.listeContrainte.add(contrainte5);
+        Constraint contrainte6 = new Implication(this.toitureTermine,true,this.murElevee,true);
+        this.listeContrainte.add(contrainte6);
+        Constraint contrainte7 = new Implication(this.murElevee,true,this.dalleCoulee,true);
+        this.listeContrainte.add(contrainte7);
+    }
 
+    @Override
+    public String toString(){
+        return "";
     }
 }
