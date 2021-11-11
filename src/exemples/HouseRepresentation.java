@@ -3,40 +3,52 @@ package exemples;
 import representation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class HouseRepresentation {
-    Variable[][] grille;
-    Set<String> pieceNormal;
-    Set<String> pieceEau;
-    Set<Object> domaine;
-    Set<Constraint> listeContrainte;
-    BooleanVariable dalleCoulee;
-    BooleanVariable solHumide;
-    BooleanVariable murElevee;
-    BooleanVariable toitureTermine;
-    int i;
-    int j;
+    protected Variable[][] grille;
+    protected Set<String> pieceNormal;
+    protected Set<String> pieceEau;
+    protected Set<Object> domaine;
+    protected Set<Constraint> listeContrainte;
+    protected BooleanVariable dalleCoulee;
+    protected BooleanVariable solHumide;
+    protected BooleanVariable murElevee;
+    protected BooleanVariable toitureTermine;
+    protected List<Variable> listeVariable;
+    protected int i;
+    protected int j;
+    protected final int[] HAUT = new int[]{-1,0};
+    protected final int[] BAS = new int[]{1,0};
+    protected final int[] GAUCHE = new int[]{0,-1};
+    protected final int[] DROITE = new int[]{0,1};
     public HouseRepresentation(int i, int j, Set<String> pieceNormal, Set<String> pieceEau){
         this.i = i;
         this.j = j;
         this.grille = new Variable[i][j];
         this.pieceEau = pieceEau;
         this.pieceNormal = pieceNormal;
-        List<Object> domaine = new ArrayList<>();
-        domaine.addAll(pieceEau);
-        domaine.addAll(pieceNormal);
-        this.domaine = (Set<Object>) domaine;
+        this.domaine = new HashSet<>();
+        this.domaine.addAll(pieceEau);
+        this.domaine.addAll(pieceNormal);
+        this.listeVariable = new ArrayList<>();
         for(int li = 0; li < i; li++){
             for(int lj = 0; lj < j; lj++){
-                this.grille[i][j] = new Variable("pièce" + li + lj, this.domaine);
+                this.grille[li][lj] = new Variable("pièce" + li + lj, this.domaine);
+                this.listeVariable.add(this.grille[li][lj]);
             }
         }
         this.dalleCoulee = new BooleanVariable("dalleCoulee");
         this.solHumide = new BooleanVariable("solHumide");
         this.murElevee = new BooleanVariable("murElevee");
         this.toitureTermine = new BooleanVariable("toitureTermine");
+        this.listeVariable.add(this.dalleCoulee);
+        this.listeVariable.add(this.solHumide);
+        this.listeVariable.add(this.murElevee);
+        this.listeVariable.add(this.toitureTermine);
+        this.listeContrainte = new HashSet<>();
         this.makeConstraint();
     }
 
@@ -59,8 +71,20 @@ public class HouseRepresentation {
         //Contraintes pour que les pièces d'eau soient côte a côte
         for(int i = 0; i < this.i; i++){
             for(int j = 0; j < this.j; j++){
-                int[][] voisins = new int[][]{{-1,0},{0,-1},{0,1},{1,0}};
+                int[][] voisins = new int[][]{HAUT,BAS,GAUCHE,DROITE};
                 for(int[] voisin : voisins){
+                    if(j == this.j-1 && voisin == DROITE){
+                        continue;
+                    }
+                    if(i == this.i-1 && voisin == BAS){
+                        continue;
+                    }
+                    if(j == 0 && voisin == GAUCHE){
+                        continue;
+                    }
+                    if(i == 0 && voisin == HAUT){
+                        continue;
+                    }
                     Variable varActu = this.grille[i][j];
                     Variable varVoisin = this.grille[i + voisin[0]][j + voisin[1]];
                     BinaryExtensionConstraint contrainte = new BinaryExtensionConstraint(varActu,varVoisin);
@@ -97,5 +121,13 @@ public class HouseRepresentation {
     @Override
     public String toString(){
         return "";
+    }
+
+    public List<Variable> getListeVariable() {
+        return listeVariable;
+    }
+
+    public Set<Constraint> getContrainte(){
+        return this.listeContrainte;
     }
 }

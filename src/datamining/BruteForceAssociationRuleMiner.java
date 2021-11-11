@@ -35,7 +35,7 @@ public class BruteForceAssociationRuleMiner extends AbstractAssociationRuleMiner
         result.remove(items);
         return result;
     }
-    //TODO a revoir
+    //TODO compliqué donc a bien recomprendre (idem pour le extrac de Apriori)
     @Override
     public Set<AssociationRule> extract(float minFrequency, float minConfidence){
         Set<AssociationRule> retourne = new HashSet<>();

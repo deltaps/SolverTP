@@ -22,6 +22,8 @@ public class HeuristicMACSolver extends AbstractSolver{
         }
         return MACSolver(new HashMap<Variable, Object>(), new LinkedList<>(this.var), domaines);
     }
+    //TODO revoir
+    // I = instanciation, V = variables, ED = domaine
     public Map<Variable,Object> MACSolver(Map<Variable,Object> I,LinkedList<Variable> V,Map<Variable,Set<Object>> ED){
         if(V.isEmpty()){
             return I;
@@ -36,32 +38,30 @@ public class HeuristicMACSolver extends AbstractSolver{
 
             //Si toutes les variables sont instanciees
             for(Variable v : V){
-                for(Map.Entry<Variable, Set<Object>> entry : ED.entrySet()){
-                    if(entry.getKey().equals(v)){
-                        Set<Object> object = new HashSet<>(entry.getValue());
-                        domainesCopies.put(v, object);
+                for(Variable allVar : ED.keySet()){
+                    if(allVar.equals(v)){
+                        Set<Object> domaineVar = new HashSet<>(ED.get(allVar));
+                        domainesCopies.put(v,domaineVar);
                     }
                 }
             }
 
-            //On recupere la meilleure variable heuristique
+            //On recupere la meilleure variable avec la meilleure heuristique
             Variable v = this.heuristicVar.best(new HashSet<>(V), domainesCopies);
-            for(Map.Entry<Variable, Set<Object>> entry : domainesCopies.entrySet()){
-                if(entry.getKey().equals(v)){
-                    for(Object o : this.heuristicVal.ordering(v, domainesCopies.get(v))){
-                        I.put(v, o);
+            for(Variable entry : domainesCopies.keySet()){
+                if(entry.equals(v)){ // On regarde seulement pour la variable avec la meilleure heuristique
+                    for(Object o : this.heuristicVal.ordering(v,domainesCopies.get(v))){ // heuristicVal est une valueHeuristique, on peu donc l'ordonnée avec la méthode ordering
+                        I.put(v,o);
                         if(this.isConsistent(I)){
                             Set<Object> tmpDomaines = new HashSet<>();
                             tmpDomaines.add(o);
-                            domainesCopies.put(v, tmpDomaines);
-                            if (I.keySet().containsAll(this.var)) {
+                            domainesCopies.put(v,tmpDomaines);
+                            if(I.keySet().containsAll(this.var)){
                                 return I;
                             }
-                            Map<Variable, Object> newInstanciation = new HashMap<>();
-                            newInstanciation = this.MACSolver(I, V, domainesCopies);
-                            // Solution trouvee
-                            if(newInstanciation != null){
-                                return newInstanciation;
+                            Map<Variable,Object> nouvelleInstanciation = this.MACSolver(I,V,domainesCopies);//Appel récursif
+                            if(nouvelleInstanciation != null){
+                                return nouvelleInstanciation;
                             }
                         }
                         I.remove(v);
