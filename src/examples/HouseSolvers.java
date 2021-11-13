@@ -1,10 +1,9 @@
-package exemples;
+package examples;
 
 import representation.Constraint;
 import representation.Variable;
 import solvers.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;

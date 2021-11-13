@@ -1,4 +1,4 @@
-package exemples;
+package examples;
 
 import representation.Constraint;
 import representation.Variable;

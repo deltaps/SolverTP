@@ -1,8 +1,7 @@
-package exemples;
+package examples;
 
 import planning.*;
 import representation.BooleanVariable;
-import representation.Constraint;
 import representation.Variable;
 
 import java.util.*;

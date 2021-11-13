@@ -1,4 +1,4 @@
-package exemples;
+package examples;
 
 import datamining.AssociationRule;
 import datamining.BooleanDatabase;
