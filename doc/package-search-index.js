@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"datamining"},{"l":"exemples"},{"l":"planning"},{"l":"representation"},{"l":"solvers"}];updateSearchResults();
