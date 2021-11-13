@@ -130,4 +130,24 @@ public class HouseRepresentation {
     public Set<Constraint> getContrainte(){
         return this.listeContrainte;
     }
+
+    public BooleanVariable getDalleCoulee() {
+        return dalleCoulee;
+    }
+
+    public BooleanVariable getSolHumide() {
+        return solHumide;
+    }
+
+    public BooleanVariable getMurElevee() {
+        return murElevee;
+    }
+
+    public BooleanVariable getToitureTermine() {
+        return toitureTermine;
+    }
+
+    public Set<Object> getDomaine() {
+        return domaine;
+    }
 }
